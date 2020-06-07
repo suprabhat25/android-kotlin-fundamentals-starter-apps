@@ -73,7 +73,7 @@ class NewMessageActivity : AppCompatActivity() {
     }
 }
 
-private fun Parcelable.putExtra(userKey: String, user: User) {
+fun Parcelable.putExtra(userKey: String, user: User) {
 
 }
 

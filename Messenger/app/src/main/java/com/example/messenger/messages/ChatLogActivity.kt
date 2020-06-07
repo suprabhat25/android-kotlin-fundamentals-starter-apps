@@ -64,6 +64,7 @@ class ChatLogActivity : AppCompatActivity() {
                         adapter.add(ChatToItem(chatMessage.text,toUser!!))
                     }
                 }
+                recyclerview_chat_log.scrollToPosition(adapter.itemCount-1)
             }
 
             override fun onCancelled(p0: DatabaseError) {
@@ -109,7 +110,13 @@ class ChatLogActivity : AppCompatActivity() {
                 recyclerview_chat_log.scrollToPosition(adapter.itemCount-1)
             }
       toReference.setValue(chatMessage)
-  }
+
+    val latestMessagesRef = FirebaseDatabase.getInstance().getReference("/latest-messages/$fromId/$toId")
+    latestMessagesRef.setValue(chatMessage)
+
+    val latestMessagesToRef = FirebaseDatabase.getInstance().getReference("/latest-messages/$toId/$fromId")
+    latestMessagesToRef.setValue(chatMessage)
+}
 }
 class ChatFromItem(val text:String, val user: com.example.messenger.messages.User): Item<GroupieViewHolder>(){
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
