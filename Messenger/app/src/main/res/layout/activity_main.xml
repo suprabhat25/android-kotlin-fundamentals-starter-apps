@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#31BD02"
-    tools:context=".MainActivity">
+    tools:context=".messages.MainActivity">
 
     <Button
         android:id="@+id/select_photo_button"
@@ -114,6 +114,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/register_button"
         app:layout_constraintVertical_bias="0.074" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/selectphoto_imageview"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        app:layout_constraintBottom_toBottomOf="@+id/select_photo_button"
+        app:layout_constraintEnd_toEndOf="@+id/select_photo_button"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/select_photo_button"
+        app:layout_constraintTop_toTopOf="@+id/select_photo_button"
+        app:layout_constraintVertical_bias="0.0" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

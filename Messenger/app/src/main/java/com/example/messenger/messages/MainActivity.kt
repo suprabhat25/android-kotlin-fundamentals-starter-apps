@@ -1,14 +1,14 @@
-package com.example.messenger
+package com.example.messenger.messages
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.widget.Toast
+import com.example.messenger.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         already_registered.setOnClickListener(){
-          val intent = Intent(this,LoginActivity::class.java)
+          val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent);
         }
 
@@ -48,8 +48,10 @@ class MainActivity : AppCompatActivity() {
             selectedPhotoUri = data.data
 
             val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, selectedPhotoUri)
-            val bitmapDrawable = BitmapDrawable(bitmap)
-            select_photo_button.setBackgroundDrawable(bitmapDrawable)
+            selectphoto_imageview.setImageBitmap(bitmap)
+            selectphoto_imageview.alpha = 0f
+//            val bitmapDrawable = BitmapDrawable(bitmap)
+//            select_photo_button.setBackgroundDrawable(bitmapDrawable)
         }
     }
 
@@ -73,7 +75,7 @@ class MainActivity : AppCompatActivity() {
                 if(!it.isSuccessful) return@addOnCompleteListener
 
                 //else if successful
-                // Log.d("Main","Successfully Created with uid: ${it.result.user.uid}")
+               // Log.d("Main","Successfully Created with uid: ${it.result.user.uid}")
              uploadImageToFirebaseStorage()
             }
             .addOnFailureListener{
@@ -106,12 +108,26 @@ class MainActivity : AppCompatActivity() {
         val uid = FirebaseAuth.getInstance().uid ?: ""
         val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
 
-        val user = User(uid,username_edittext.text.toString(),profileImageUrl)
+        val user = User(
+            uid,
+            username_edittext.text.toString(),
+            profileImageUrl
+        )
         ref.setValue(user)
             .addOnSuccessListener{
                 Log.d("Main","Saved the user to firebase database")
+
+                val intent = Intent(this,
+                    LatestMessengerActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK) // to clear earlier activity from the stack
+                startActivity(intent)
+            }
+            .addOnFailureListener{
+                Log.d("Main","Failed to set value to firebase database: ${it.message}")
             }
     }
 }
 
-class User(val uid:String, val username:String, val profileImageUrl:String )
+class User(val uid:String, val username:String, val profileImageUrl:String ){
+    //constructor() : this(uid:" ", username:" ", profileImageUrl:" ")
+}
